@@ -1,0 +1,4 @@
+venv
+.idea
+/solver/cmake-build-debug/
+/solver/solver

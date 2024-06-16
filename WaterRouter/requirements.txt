@@ -1,0 +1,17 @@
+Flask~=3.0.3
+pylightxl~=1.61
+numpy~=1.26.4
+pandas~=2.2.2
+matplotlib~=3.9.0
+
+scipy~=1.13.1
+pillow~=10.3.0
+opencv-python~=4.10.0.82
+openpyxl~=3.1.3
+Flask-Cors~=4.0.1
+
+Werkzeug~=3.0.3
+webp~=0.4.0
+
+python-dateutil~=2.9.0.post0
+filehash~=0.2.dev1

@@ -1,0 +1,25 @@
+{
+  "name": "nuxt-app",
+  "dependencies": {
+    "@nuxt/image": "latest",
+    "@vueuse/core": "^10.11.0",
+    "@vueuse/nuxt": "^10.11.0",
+    "nuxt": "^3.12.1",
+    "vue": "^3.4.27",
+    "vue-router": "^4.3.3",
+    "vue-slider-component": "next",
+    "vue-tippy": "^6.4.1"
+  },
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "type": "module",
+  "devDependencies": {
+    "sass": "^1.77.5"
+  }
+}

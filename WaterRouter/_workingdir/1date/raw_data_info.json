@@ -1,0 +1,37 @@
+{
+  "name": "Новый расчёт",
+  "current_ships": "Расписание движения судов.xslx",
+  "ice_filename": "IntegrVelocity.xlsx",
+  "iceships": [
+    {
+      "name": "50 лет Победы",
+      "location": "Пролив Лонга",
+      "sp3": 22,
+      "fine2": 0,
+      "fine1": 0
+    },
+    {
+      "name": "Ямал",
+      "location": "Рейд Мурманска",
+      "sp3": 21,
+      "fine2": 0,
+      "fine1": 0
+    },
+    {
+      "name": "Таймыр",
+      "location": "Мыс Желания",
+      "sp3": 18.5,
+      "fine2": 10,
+      "fine1": 10
+    },
+    {
+      "name": "Вайгач",
+      "location": "Победа месторождение",
+      "sp3": 18.5,
+      "fine2": 10,
+      "fine1": 10
+    }
+  ],
+  "iceships_date": "2022/03/01",
+  "ships_filename": "a.xlsx"
+}
