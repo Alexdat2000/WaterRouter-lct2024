@@ -12,8 +12,17 @@ import "vue-slider-component/dist-css/vue-slider-component.css";
 import "vue-slider-component/theme/default.css";
 
 const id = computed(() => useRoute().query.id);
-const { dates, date_ships, date_map_id, routes_info, routes_error } =
-  useRoutes(id);
+const {
+  dates,
+  date_ships,
+  date_map_id,
+  routes_info,
+  routes_error,
+  ships_list,
+} = useRoutes(id);
+
+const tracked_ship = ref("");
+provide("tracked_ship", tracked_ship);
 
 const current_date = ref("");
 watch(dates, async (newDates, oldDates) => {
@@ -90,6 +99,12 @@ async function ganttIceships() {
           Скачать маршрутные данные
         </a>
       </div>
+      <div class="track">
+        <p>Отслеживать корабль:</p>
+        <select v-model="tracked_ship">
+          <option v-for="ship in ships_list">{{ ship }}</option>
+        </select>
+      </div>
       <vue-slider
         style="width: 50vw"
         :data="dates"
@@ -119,6 +134,35 @@ async function ganttIceships() {
 </template>
 
 <style scoped lang="scss">
+.track {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  max-width: 80%;
+  height: 41px;
+  align-items: center;
+  margin-bottom: 15px;
+  margin-top: 7px;  
+}
+
+.track select {
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 100px;
+  border: none;
+  background-color: #29609f;
+  color: white;
+  padding-left: 10px;
+  height: 100%;
+  appearance: none;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAABUElEQVR4nO3UMU4DMRCF4TlHLgMSaSlzGmhJqlfQIM5KwUMRixQlBURk7bHn/yRLK22xs/4tRwAAAAAAAAAAAAAAAAAAAAAAAAAAAFzJ9sb2o+0dy7tlLzZdDpLtZ9sfxrnjnjy1jrG9GAPnti2DvF98HufeCFI4CFfW7x6aBVmiHP4wVFWHpjFOorz0/vOE1CUGURLGIErCGD+KX1+KjIpGUWRWLIpiBEWiKEYyeRTFiCaNohjZZFEUM5gkimImg0dRzGjQKIqZDRZFUcEgURSVJI+iqChpFEVlyaKo936kkCSKeu9DKp2jqPf/p+Q+UYiRKIqanbaRuU0UYiSKotVO08y8ThRiJIqim52WynybKMRIFEU3HQb/ikKMRFG06jC4KgoxEkVR02Hwzfbe9udJiOPzfnmNHmzf235d1h0VAAAAAAAAAAAAAAAAAERfX6MjL5dyvtIeAAAAAElFTkSuQmCC);
+  background-size: 20px;
+  background-position: 95%;
+  background-repeat: no-repeat;
+}
+
 .error-container {
   width: 100vw;
   height: calc(100vh - 82.5px);

@@ -59,7 +59,7 @@ async function edit() {
 
 <style scoped lang="scss">
 .header {
-  width: 100%;
+  // width: 100%;
   top: 0;
   left: 0;
   background: white;
@@ -78,8 +78,9 @@ async function edit() {
 }
 
 .buttons {
-  margin-right: 15px;
+  // margin-right: 15px;
   padding: 15px;
+  padding-right: 0;
   height: 100%;
   display: flex;
   flex-direction: row;

@@ -1,8 +1,9 @@
+import datetime
 import json
 import os
 import shutil
-import subprocess
 import time
+import math
 import uuid
 from io import BytesIO
 from os.path import isfile
@@ -32,12 +33,14 @@ def get_map():
     cid = request.args.get('id')
     if 'id' not in request.args or not os.path.isdir(os.path.join("_workingdir", cid)):
         return "Неизвестный id", 404
+    if 'mapid' not in request.args:
+        return "Неизвестный id карты", 404
+
     map_id = request.args.get('mapid')
-    for _ in range(10):
-        try:
-            return send_file(os.path.join("_workingdir", cid, "result", "pics", map_id + ".png"), mimetype='image/png')
-        except:
-            time.sleep(1)
+    if os.path.isdir(os.path.join("_workingdir", cid, "result", "pics")):
+        return send_file(os.path.join("_workingdir", cid, "result", "pics", map_id + ".png"), mimetype='image/png')
+    else:
+        return send_file(os.path.join("common_data", "pics_precalc", map_id + ".png"), mimetype='image/png')
 
 
 @app.route('/getIcon')
@@ -319,16 +322,23 @@ def get_raw_data():
     for i in points_info:
         name[i["id"]] = i["name"]
     iceship_data = json.load(open(os.path.join("_workingdir", cid, "raw_data_info.json"), encoding="utf-8"))
+    start_date = parse(open(os.path.join("_workingdir", cid, f"start.txt"), encoding="utf-8").read(),
+                       dayfirst=True).date()
 
     ans = []
     for j in open(os.path.join("_workingdir", cid, "result", "movements.txt")):
         x = j.split()
+        t_start, t_end = map(float, x[:2])
         fr, to = map(int, x[2:4])
         ships = list(map(int, x[4:]))
 
         ans.append({
             "from": name[fr],
             "to": name[to],
+            "start": (datetime.datetime.combine(start_date, datetime.datetime.min.time()) + datetime.timedelta(
+                seconds=round(t_start * 24 * 60 * 60))).strftime("%d/%m/%Y, %H:%M:%S"),
+            "end": (datetime.datetime.combine(start_date, datetime.datetime.min.time()) + datetime.timedelta(
+                seconds=round(t_end * 24 * 60 * 60))).strftime("%d/%m/%Y, %H:%M:%S"),
             "icebreaker": "" if ships[0] > 0 else iceship_data["iceships"][-ships[0] - 1]["name"],
             "ships": ships[1:] if ships[0] < 0 else ships
         })
@@ -343,17 +353,6 @@ def get_raw_data():
         download_name=f'{cid}.json',
         mimetype='application/json'
     )
-
-
-#  Misc
-@app.route('/cleanAll')
-def clean_workingdir():
-    for root, dirs, files in os.walk('_workingdir'):
-        for f in files:
-            os.unlink(os.path.join(root, f))
-        for d in dirs:
-            shutil.rmtree(os.path.join(root, d))
-    return ""
 
 
 if __name__ == '__main__':

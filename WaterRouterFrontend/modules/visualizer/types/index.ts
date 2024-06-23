@@ -8,6 +8,8 @@ interface ShipInfo {
     to_y: number
     tooltip: string
     icon: string
+    icon_selected: string
+    ships: string[]
 }
 
 interface DateInfo {
@@ -21,6 +23,7 @@ interface Result {
     info: string
     visual_map: DateInfo[]
     gantt: any
+    ships: string[]
 }
 
 interface Port {

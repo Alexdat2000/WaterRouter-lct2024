@@ -1,10 +1,11 @@
-import type { Result, ShipInfo } from "../types";
+import type { Result, ShipInfo } from "./index";
 
 const dates = reactive<string[]>([]);
 const date_ships = reactive<Map<string, ShipInfo[]>>(new Map());
 const date_map_id = reactive<Map<string, string>>(new Map());
 const gantt_info = ref<string>("");
 const routes_info = ref<string>("");
+const ships_list = ref<string[]>([]);
 
 const routes_error = ref<string>("");
 
@@ -52,6 +53,7 @@ export default function useRoutes(id?: Ref<string>) {
                 }
                 gantt_info.value = result.gantt
                 routes_info.value = result.info
+                ships_list.value = result.ships
             })
             watch(id, async (newId, oldId) => {
                 if (newId !== oldId) {
@@ -95,9 +97,10 @@ export default function useRoutes(id?: Ref<string>) {
                     }
                     gantt_info.value = result.gantt
                     routes_info.value = result.info
+                    ships_list.value = result.ships
                 }
             })
         })
     }
-    return { dates, date_ships, date_map_id, gantt_info, routes_info, routes_error };
+    return { dates, date_ships, date_map_id, gantt_info, routes_info, routes_error, ships_list };
 }

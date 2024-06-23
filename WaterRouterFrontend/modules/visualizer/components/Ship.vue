@@ -5,11 +5,13 @@ import "tippy.js/themes/material.css";
 
 import type { ShipInfo } from "../types";
 defineProps<{ ship_info: ShipInfo; z_layer: number }>();
+
+const tracked_ship = inject("tracked_ship") as Ref<string>;
 </script>
 
 <template>
   <NuxtImg
-    :src="`${$config.public.baseURL}/getIcon?id=${ship_info.icon}`"
+    :src="`${$config.public.baseURL}/getIcon?id=${ship_info.ships.includes(tracked_ship) ? ship_info.icon_selected : ship_info.icon}`"
     :style="`z-index: ${z_layer}; position: absolute; left: ${
       ship_info.x / 10
     }%; top: ${ship_info.y / 5}%; 

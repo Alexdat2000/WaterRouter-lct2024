@@ -125,12 +125,19 @@ def generate_visual_map(cid, start, finish):
 
             if len(ships) == 1:
                 if ships[0] < 0:
-                    tooltip = f'Ледокол "{iceship_data["iceships"][-ships[0] - 1]["name"]}"<br>{name[fr]} — {name[to]}'
+                    tooltip = f'Ледокол "{iceship_data["iceships"][-ships[0] - 1]["name"].title()}"<br>{name[fr]} — {name[to]}'
                 else:
-                    tooltip = f'Корабль "{ships_data[ships[0] - 1]["name"]}" (заявка {ships[0]}, класс {ships_data[ships[0] - 1]["class"]})<br>{name[fr]} — {name[to]}'
+                    tooltip = f'Корабль "{ships_data[ships[0] - 1]["name"].title()}" (заявка {ships[0]}, класс {ships_data[ships[0] - 1]["class"]})<br>{name[fr]} — {name[to]}'
             else:
-                tooltip = f'Конвой: {name[fr]} — {name[to]}<br>Ледокол "{iceship_data["iceships"][-ships[0] - 1]["name"]}"<br>Заявки: ' + ', '.join(
+                tooltip = f'Конвой: {name[fr]} — {name[to]}<br>Ледокол "{iceship_data["iceships"][-ships[0] - 1]["name"].title()}"<br>Заявки: ' + ', '.join(
                     map(str, sorted(ships[1:])))
+
+            ship_names = []
+            for k in ships:
+                if k < 0:
+                    ship_names.append(iceship_data["iceships"][-k - 1]["name"].title())
+                else:
+                    ship_names.append(f"Заявка {i} ({ships_data[k - 1]["name"].title()})")
 
             now["infos"].append({
                 "x": x,
@@ -142,6 +149,8 @@ def generate_visual_map(cid, start, finish):
                 "to_y": to_y,
                 "tooltip": tooltip,
                 "icon": icon,
+                "icon_selected": icon.replace(".png", "") + "_sel.png",
+                "ships": ship_names
             })
 
         stationary = defaultdict(lambda: [])
@@ -156,7 +165,7 @@ def generate_visual_map(cid, start, finish):
                 iceship_names = []
                 for j in stationary[lo]:
                     if j < 0:
-                        iceship_names.append(f'"{iceship_data["iceships"][-j - 1]["name"]}"')
+                        iceship_names.append(f'"{iceship_data["iceships"][-j - 1]["name"].title()}"')
                 tooltip += f'<br>Ледоколы: ' + ', '.join(iceship_names)
             if max(stationary[lo]) > 0:
                 ship_names = []
@@ -172,6 +181,14 @@ def generate_visual_map(cid, start, finish):
             else:
                 icon = "ship_stop.png"
             x, y = scale(loc[lo][0], loc[lo][1])
+
+            ship_names = []
+            for k in stationary[lo]:
+                if k < 0:
+                    ship_names.append(iceship_data["iceships"][-k - 1]["name"].title())
+                else:
+                    ship_names.append(f"Заявка {k} ({ships_data[k - 1]["name"].title()})")
+
             now["infos"].append({
                 "x": x,
                 "y": y,
@@ -181,6 +198,8 @@ def generate_visual_map(cid, start, finish):
                 "to_y": 0,
                 "tooltip": tooltip,
                 "icon": icon,
+                "icon_selected": icon.replace(".png", "") + "_sel.png",
+                "ships": ship_names,
             })
         visual_map.append(now)
 
@@ -189,6 +208,7 @@ def generate_visual_map(cid, start, finish):
 
 def generate_map_data(cid, stdout, stderr):
     datapath = os.path.join("_workingdir", cid, "result")
+    path = os.path.join("_workingdir", cid)
     start = float('inf')
     finish = float('-inf')
 
@@ -214,23 +234,27 @@ def generate_map_data(cid, stdout, stderr):
         info += (f"<br><br>Заявки {', '.join(rej)} были отклонены из-за слишком плотного льда, "
                  f"рекомендуется перенести точки отправления/прибытия в более благоприятные порты или применить дизельные ледоколы")
     info += "<br>" + open(os.path.join("_workingdir", cid, "result", "reroutes.txt")).read()
+
+    ships = [""]
+    data = json.load(open(os.path.join(path, "raw_data_info.json"), encoding="utf-8"))
+    for ship in data["iceships"]:
+        ships.append(ship["name"].title())
+    ships_info = json.load(open(os.path.join(path, "ships.json"), encoding="utf-8"))
+    for idx, ship in enumerate(ships_info):
+        ships.append(f"Заявка {idx + 1} ({ship["name"].title()})")
+
     json.dump({
         "info": info,
         "visual_map": visual_map,
+        "ships": ships,
     }, open(os.path.join(datapath, "visual.json"), "w"), ensure_ascii=False)
     return True
 
 
 def generate_images(path, output):
     md5hasher = FileHash('md5')
-    if md5hasher.hash_file(os.path.join(path, "ice.xlsx")) == md5hasher.hash_file(
-            os.path.join("common_data", "ice.xlsx")):
-        shutil.copytree(os.path.join("common_data", "pics_precalc"), output)
-
-        for i in range(10):
-            time.sleep(1)
-            if isdir(output) and os.listdir(os.path.join("common_data", "pics_precalc")) == os.listdir(output):
-                continue
+    if (md5hasher.hash_file(os.path.join(path, "ice.xlsx")) ==
+            md5hasher.hash_file(os.path.join("common_data", "ice.xlsx"))):
         return True
 
     os.mkdir(output)
