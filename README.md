@@ -1,9 +1,18 @@
-Ссылка на протитип: [http://water.fvds.ru/](http://water.fvds.ru/)
+В данном репозитории находится решение задачи с хакатона ЛЦТ-2024 от команды Water
 
-Создать расчёт из примера: [http://water.fvds.ru/newFromTemplate](http://water.fvds.ru/newFromTemplate)
+Условие задачи: [файл](presentation/statements.pdf)
 
-Примеры: [http://water.fvds.ru/result?id=example](http://water.fvds.ru/result?id=example), 
-
-[http://water.fvds.ru/result?id=6icebreakers](http://water.fvds.ru/result?id=6icebreakers), 
-
-[http://water.fvds.ru/result?id=1date](http://water.fvds.ru/result?id=1date)
+![](presentation/Slide1.PNG)
+![](presentation/Slide2.PNG)
+![](presentation/Slide3.PNG)
+![](presentation/Slide4.PNG)
+![](presentation/Slide5.PNG)
+![](presentation/Slide6.PNG)
+![](presentation/Slide7.PNG)
+![](presentation/Slide8.PNG)
+![](presentation/Slide9.PNG)
+![](presentation/Slide10.PNG)
+![](presentation/Slide11.PNG)
+![](presentation/Slide12.PNG)
+![](presentation/Slide13.PNG)
+![](presentation/Slide14.PNG)
